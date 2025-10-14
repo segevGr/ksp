@@ -5,10 +5,10 @@ pipeline {
 	}
 	stages{
 		stage("test"){
-			script{
-				sh """
-					echo hello man
-				"""
+			steps{
+				script{
+					sh 'echo hello man'
+				}
 			}
 		}
 	}
