@@ -1,7 +1,11 @@
 pipeline {
-	agent any
+	agent {
+		docker {
+            image 'php:8.2'
+        }
+	}
 	environment {
-		TEST = "testvar"
+		TAG_ID = env.BUILD_ID
 	}
 	stages{
 		stage("build and test"){
