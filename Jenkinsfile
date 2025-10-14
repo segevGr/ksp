@@ -1,7 +1,7 @@
 pipeline {
 	agent any
 	environment {
-
+		TEST = "testvar"
 	}
 	stages{
 		stage("test"){
