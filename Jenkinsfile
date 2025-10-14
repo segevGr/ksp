@@ -4,10 +4,13 @@ pipeline {
 		TEST = "testvar"
 	}
 	stages{
-		stage("test"){
+		stage("build and test"){
 			steps{
 				script{
-					sh 'echo hello man'
+					sh '''
+						php -S localhost:8081
+						curl localhost:8081/health | grep '"status":"ok"'
+					'''
 				}
 			}
 		}
