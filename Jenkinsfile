@@ -30,7 +30,7 @@ pipeline {
 			steps{
 				script{
 					sh """
-						curl http://${APP_NAME}:80 | grep '"status":"ok"'
+						curl http://${APP_NAME}/health:80 | grep '"status":"ok"'
 					"""
 				}
 			}
