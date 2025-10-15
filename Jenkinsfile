@@ -30,10 +30,16 @@ pipeline {
 			steps{
 				script{
 					sh """
-						curl http://${APP_NAME}:8081 | grep '"status":"ok"'
+						curl http://${APP_NAME}:80 | grep '"status":"ok"'
 					"""
 				}
 			}
+		}
+	}
+	post {
+		always{
+			sh "docker rm -f ${APP_NAME} | true"
+			sh "docker rmi -f ${APP_NAME}:${TAG_ID}"
 		}
 	}
 }
