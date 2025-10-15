@@ -1,7 +1,7 @@
 pipeline {
 	agent any
 	environment {
-		TAG_ID = env.BUILD_ID
+		TAG_ID = ${env.BUILD_ID}
 		NETWORK = "jenkins-network"
 		APP_NAME = "ksp-app"
 	}
