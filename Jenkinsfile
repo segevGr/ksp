@@ -70,7 +70,7 @@ pipeline {
 			steps{
 				script{
 					sh """
-						kubectl port-forward service/ksp-app 8081:80 &
+						nohup kubectl port-forward service/ksp-app 8081:80 &
 						sleep 5
 						curl http://localhost:8081/health | grep '"status":"ok"'
 						pkill -f "kubectl port-forward service/ksp-app 8081:80" || true
@@ -84,5 +84,15 @@ pipeline {
 			sh "docker rm -f ${APP_NAME} | true"
 			sh "docker rmi -f ${APP_NAME}:${TAG_ID}"
 		}
+		success {
+			mail to: 'team@example.com',
+			subject: "success Pipeline: ${currentBuild.fullDisplayName}",
+			body: "The pipeline ${currentBuild.fullDisplayName} completed successfully."
+        }
+        failure {
+			mail to: 'team@example.com',
+			subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+			body: "Something is wrong with ${env.BUILD_URL}"
+        }
 	}
 }
