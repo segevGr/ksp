@@ -8,6 +8,10 @@ pipeline {
 	}
 	stages{
 		stage("build and unit test"){
+			agent {
+				docker {
+					image 'php:8.2-cli'
+				}
 			steps{
 				script{
 					sh '''
