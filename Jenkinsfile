@@ -53,11 +53,6 @@ pipeline {
 			}
 		}
 		stage("deploy") {
-		agent {
-			docker {
-				image 'lachlanevenson/k8s-kubectl:v1.30.0'
-			}
-		}
 			steps{
 				script{
 					dir("k8n"){
