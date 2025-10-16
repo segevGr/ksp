@@ -55,13 +55,15 @@ pipeline {
 		stage("deploy") {
 			steps{
 				script{
-					sh """
-						echo deploying
-					"""
+					dir("k8n"){
+						sh """
+							kubectl apply -f deployment.yaml 
+							kubectl rollout status ksp-app
+						"""
+					}
 				}
 			}
 		}
-
 	}
 	post {
 		always{
