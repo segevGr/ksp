@@ -71,7 +71,9 @@ pipeline {
 				script{
 					sh """
 						kubectl port-forward service/ksp-app 8081:80 &
+						sleep 5
 						curl http://localhost:8081/health | grep '"status":"ok"'
+						pkill -f "kubectl port-forward service/ksp-app 8081:80" || true
 					"""
 				}
 			}
