@@ -53,6 +53,11 @@ pipeline {
 			}
 		}
 		stage("deploy") {
+		agent {
+			docker {
+				image 'bitnami/kubectl:latest'
+			}
+		}
 			steps{
 				script{
 					dir("k8n"){
