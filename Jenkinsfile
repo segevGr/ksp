@@ -44,6 +44,7 @@ pipeline {
 			steps{
 				script{
 					sh """
+						docker tag ${APP_NAME}:${TAG_ID} ${REPOSITORY_NAME}/${APP_NAME}:${TAG_ID}
 						docker push ${REPOSITORY_NAME}/${APP_NAME}:${TAG_ID}
 					"""
 				}
