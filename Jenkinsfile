@@ -58,7 +58,7 @@ pipeline {
 					dir("k8n"){
 						sh """
 							sed "s/TAG_PLACEHOLDER/${TAG_ID}/g" deployment.yaml > deployment_temp.yaml
-							kubectl apply -f deployment.yaml 
+							kubectl apply -f deployment_temp.yaml 
 							kubectl rollout status deployment/ksp-app
 						"""
 					}
