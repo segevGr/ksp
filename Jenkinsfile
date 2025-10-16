@@ -4,18 +4,18 @@ pipeline {
 		TAG_ID = "${env.BUILD_ID}"
 		NETWORK = "jenkins-network"
 		APP_NAME = "ksp-app"
+		REPOSITORY_NAME = "segev126"
 	}
 	stages{
-		// stage("build"){
-		// 	steps{
-		// 		script{
-		// 			sh '''
-		// 				php -S localhost:8081
-		// 				curl localhost:8081/health | grep '"status":"ok"'
-		// 			'''
-		// 		}
-		// 	}
-		// }
+		stage("build and unit test"){
+			steps{
+				script{
+					sh '''
+						REQUEST_URI=/health php index.php | grep '"status":"ok"'
+					'''
+				}
+			}
+		}
 		stage("package"){
 			steps{
 				script{
@@ -30,11 +30,30 @@ pipeline {
 			steps{
 				script{
 					sh """
-						curl http://${APP_NAME}/health:80 | grep '"status":"ok"'
+						curl http://${APP_NAME}:80/health | grep '"status":"ok"'
 					"""
 				}
 			}
 		}
+		stage("publish") {
+			steps{
+				script{
+					sh """
+						docker push ${REPOSITORY_NAME}/${APP_NAME}:${TAG_ID}
+					"""
+				}
+			}
+		}
+		stage("deploy") {
+			steps{
+				script{
+					sh """
+						echo deploying
+					"""
+				}
+			}
+		}
+
 	}
 	post {
 		always{
