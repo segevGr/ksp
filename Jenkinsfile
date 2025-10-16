@@ -60,8 +60,19 @@ pipeline {
 							sed "s/TAG_PLACEHOLDER/${TAG_ID}/g" deployment.yaml > deployment_temp.yaml
 							kubectl apply -f deployment_temp.yaml 
 							kubectl rollout status deployment/ksp-app
+							kubectl apply -f service.yaml
 						"""
 					}
+				}
+			}
+		}
+		stage("final-test") {
+			steps{
+				script{
+					sh """
+						kubectl port-forward service/ksp-app 8081:80 &
+						curl http://localhost:8081/health | grep '"status":"ok"'
+					"""
 				}
 			}
 		}
