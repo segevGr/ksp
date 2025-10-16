@@ -12,6 +12,7 @@ pipeline {
 				docker {
 					image 'php:8.2-cli'
 				}
+			}
 			steps{
 				script{
 					sh '''
