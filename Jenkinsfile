@@ -55,13 +55,14 @@ pipeline {
 		stage("deploy") {
 		agent {
 			docker {
-				image 'bitnami/kubectl:latest'
+				image 'lachlanevenson/k8s-kubectl:v1.30.0'
 			}
 		}
 			steps{
 				script{
 					dir("k8n"){
 						sh """
+							sed "s/TAG_PLACEHOLDER/${TAG_ID}/g" deployment.yaml > deployment_temp.yaml
 							kubectl apply -f deployment.yaml 
 							kubectl rollout status ksp-app
 						"""
