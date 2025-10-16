@@ -45,7 +45,7 @@ pipeline {
 			steps{
 				script{
 					sh """
-						echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+						echo "$DOCKER_HUB_TOKEN" | docker login -u "$REPOSITORY_NAME" --password-stdin
 						docker tag ${APP_NAME}:${TAG_ID} ${REPOSITORY_NAME}/${APP_NAME}:${TAG_ID}
 						docker push ${REPOSITORY_NAME}/${APP_NAME}:${TAG_ID}
 					"""
