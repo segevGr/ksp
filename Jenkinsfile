@@ -4,6 +4,8 @@ pipeline{
 		APP_NAME = "ksp-app"
 		TAG_ID = "${BUILD_NUMBER}"
 		HOST_NETWORK = "jenkins-network"
+		DOCKER_HUB_USER = "segev126"
+		DOCKER_HUB_TOKEN = $credentials('DOCKER_HUB_TOKEN')
 	}
 	options {
         timeout(time: 1, unit: 'HOURS') 
@@ -49,6 +51,14 @@ pipeline{
 						curl ${APP_NAME}:80 | grep 'active_count'
 					"""
 				}
+			}
+		}
+		stage ("publish") {
+			steps {
+				sh """
+					docker login --username=${DOCKER_HUB_USER} --password-stdin=${DOCKER_HUB_TOKEN}
+					docker push ${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}
+				"""
 			}
 		}
 	}
