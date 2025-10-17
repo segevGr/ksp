@@ -16,7 +16,21 @@ pipeline{
 			}
 			steps{
 				script{
-						sh "php -l /app"
+						sh "find . -name '*.php' -print0 | xargs -0 -n1 php -l"
+				}
+			}
+		}
+		stage ("unit test") {
+				agent {
+				docker {
+					image "php:8.2-cli"
+				}
+			}
+			steps {
+				script {
+					dir("/app"){
+						sh "php index.php | grep 'active_count' "
+					}
 				}
 			}
 		}
