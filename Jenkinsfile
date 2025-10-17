@@ -56,7 +56,8 @@ pipeline{
 		stage ("publish") {
 			steps {
 				sh """
-					docker login --username=${DOCKER_HUB_USER} --password-stdin=${DOCKER_HUB_TOKEN}
+					echo "$DOCKER_HUB_TOKEN" | docker login --username=${DOCKER_HUB_USER} --password-stdin
+					docker tag ${APP_NAME}:${TAG_ID} ${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}
 					docker push ${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}
 				"""
 			}
@@ -68,6 +69,7 @@ pipeline{
 				docker stop ${env.APP_NAME} || true
 				docker rm ${env.APP_NAME} || true
 				docker rmi -f ${env.APP_NAME}:${env.TAG_ID} || true
+				docker rmi -f ${env.DOCKER_HUB_USER}/${env.APP_NAME}:${env.TAG_ID}} || true
 			"""
 		}
 	}
