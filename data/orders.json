@@ -1,7 +1,0 @@
-[
-  { "user": "alice", "item": "strings", "amount": 19.99 },
-  { "user": "bob", "item": "capo", "amount": 12.5 },
-  { "user": "Alice", "item": "guitar picks", "amount": "7.25" },
-  { "user": "charlie", "item": "mic stand", "amount": 24.0 },
-  { "user": "bob", "item": "tuner", "amount": "9.90" }
-]
