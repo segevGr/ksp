@@ -66,7 +66,7 @@ pipeline{
 			steps {
 				dir("k8s"){
 					sh """
-						sed -i "s,IMAGE_PROPS/${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}/" deployment.yaml
+						sed -i "s,IMAGE_PROPS/${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}|g" deployment.yaml
 						kubectl apply -f deployment.yaml
 						kubectl rollout status deployment/ksp-app
 					"""
