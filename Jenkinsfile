@@ -66,9 +66,9 @@ pipeline{
 			steps {
 				dir("k8s"){
 					sh """
-						sed -i "s|IMAGE_PROPS|${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}|g" deployment.yaml
-						kubectl apply -f deployment.yaml
+						kubectl set image deployment/ksp-app ksp-app=${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}
 						kubectl rollout status deployment/ksp-app
+						kubectl apply -f service.yaml
 					"""
 				}
 			}
@@ -80,8 +80,18 @@ pipeline{
 				docker stop ${env.APP_NAME} || true
 				docker rm ${env.APP_NAME} || true
 				docker rmi -f ${env.APP_NAME}:${env.TAG_ID} || true
-				docker rmi -f ${env.DOCKER_HUB_USER}/${env.APP_NAME}:${env.TAG_ID}} || true
+				docker rmi -f ${env.DOCKER_HUB_USER}/${env.APP_NAME}:${env.TAG_ID} || true
 			"""
 		}
+		failure {
+        mail to: 'team@example.com',
+			subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+			body: "Something is wrong with ${env.BUILD_URL}"
+    	}
+		success  {
+        mail to: 'team@example.com',
+			subject: "Success Pipeline: ${currentBuild.fullDisplayName}",
+			body: "Success Pipeline ${env.BUILD_URL}"
+    	}
 	}
 }
