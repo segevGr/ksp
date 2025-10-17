@@ -55,11 +55,11 @@ pipeline{
 		stage ("publish") {
 			steps {
 				withCredentials([string(credentialsId: 'DOCKER_HUB_TOKEN', variable: 'DOCKER_HUB_TOKEN')]) {
-					sh """
+					sh '''
 						echo "$DOCKER_HUB_TOKEN" | docker login --username=${DOCKER_HUB_USER} --password-stdin
 						docker tag ${APP_NAME}:${TAG_ID} ${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}
 						docker push ${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}
-					"""
+					'''
 				}
 			}
 		}
