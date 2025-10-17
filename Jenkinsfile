@@ -5,7 +5,7 @@ pipeline{
 		TAG_ID = "${BUILD_NUMBER}"
 		HOST_NETWORK = "jenkins-network"
 		DOCKER_HUB_USER = "segev126"
-		DOCKER_HUB_TOKEN = $credentials('DOCKER_HUB_TOKEN')
+		DOCKER_HUB_TOKEN = credentials('DOCKER_HUB_TOKEN')
 	}
 	options {
         timeout(time: 1, unit: 'HOURS') 
@@ -65,9 +65,9 @@ pipeline{
 	post {
 		always {
 			sh """
-				docker stop ${APP_NAME} || true
-				docker rm ${APP_NAME} || true
-				docker rmi -f ${APP_NAME}:${TAG_ID} || true
+				docker stop ${env.APP_NAME} || true
+				docker rm ${env.APP_NAME} || true
+				docker rmi -f ${env.APP_NAME}:${env.TAG_ID} || true
 			"""
 		}
 	}
