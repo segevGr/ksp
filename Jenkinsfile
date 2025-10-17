@@ -83,15 +83,15 @@ pipeline{
 				docker rmi -f ${env.DOCKER_HUB_USER}/${env.APP_NAME}:${env.TAG_ID} || true
 			"""
 		}
-		failure {
-        mail to: 'team@example.com',
-			subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-			body: "Something is wrong with ${env.BUILD_URL}"
-    	}
-		success  {
-        mail to: 'team@example.com',
-			subject: "Success Pipeline: ${currentBuild.fullDisplayName}",
-			body: "Success Pipeline ${env.BUILD_URL}"
-    	}
+		// failure {
+        // mail to: 'team@example.com',
+		// 	subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+		// 	body: "Something is wrong with ${env.BUILD_URL}"
+    	// }
+		// success  {
+        // mail to: 'team@example.com',
+		// 	subject: "Success Pipeline: ${currentBuild.fullDisplayName}",
+		// 	body: "Success Pipeline ${env.BUILD_URL}"
+    	// }
 	}
 }
