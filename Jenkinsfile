@@ -3,6 +3,7 @@ pipeline{
 	environment{
 		APP_NAME = "ksp-app"
 		TAG_ID = "${BUILD_NUMBER}"
+		HOST_NETWORK = "jenkins-network"
 	}
 	options {
         timeout(time: 1, unit: 'HOURS') 
@@ -28,11 +29,34 @@ pipeline{
 			}
 			steps {
 				script {
-					dir("/app"){
+					dir("app"){
 						sh "php index.php | grep 'active_count' "
 					}
 				}
 			}
+		}
+		stage ("package") {
+			steps {
+				script{
+					sh "docker build -t ${APP_NAME}:${TAG_ID} ."
+				}
+			}
+		}
+		stage ("e2e testing") {
+			steps {
+				script {
+					sh """
+						docker network ls | grep ${HOST_NETWORK}
+						docker run -d --rm --network ${HOST_NETWORK} --name ${APP_NAME} ${APP_NAME}:${TAG_ID}
+						curl ${APP_NAME}:80 | grep 'active_count'
+					"""
+				}
+			}
+		}
+	}
+	post {
+		always {
+			sh "docker rmi -f ${APP_NAME}:${TAG_ID} | true"
 		}
 	}
 }
