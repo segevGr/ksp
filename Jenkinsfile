@@ -10,8 +10,8 @@ pipeline{
 	stages {
 		stage ("linter"){
 			agent {
-				docker{
-					image: "php:8.2-cli"
+				docker {
+					image "php:8.2-cli"
 				}
 			}
 			steps{
