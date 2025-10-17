@@ -5,7 +5,6 @@ pipeline{
 		TAG_ID = "${BUILD_NUMBER}"
 		HOST_NETWORK = "jenkins-network"
 		DOCKER_HUB_USER = "segev126"
-		DOCKER_HUB_TOKEN = credentials('DOCKER_HUB_TOKEN')
 	}
 	options {
         timeout(time: 1, unit: 'HOURS') 
@@ -55,11 +54,13 @@ pipeline{
 		}
 		stage ("publish") {
 			steps {
-				sh """
-					echo "$DOCKER_HUB_TOKEN" | docker login --username=${DOCKER_HUB_USER} --password-stdin
-					docker tag ${APP_NAME}:${TAG_ID} ${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}
-					docker push ${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}
-				"""
+				withCredentials([string(credentialsId: 'DOCKER_HUB_TOKEN', variable: 'DOCKER_HUB_TOKEN')]) {
+					sh """
+						echo "$DOCKER_HUB_TOKEN" | docker login --username=${DOCKER_HUB_USER} --password-stdin
+						docker tag ${APP_NAME}:${TAG_ID} ${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}
+						docker push ${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}
+					"""
+				}
 			}
 		}
 		stage ("deploy"){
