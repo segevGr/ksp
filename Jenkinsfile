@@ -44,10 +44,14 @@ pipeline{
 		}
 		stage ("e2e testing") {
 			steps {
-				script {
+				sh """
+					docker network ls | grep ${HOST_NETWORK}
+					docker run -d --rm --network ${HOST_NETWORK} --name ${APP_NAME} ${APP_NAME}:${TAG_ID}
+					
+				"""
+				retry(3) {
 					sh """
-						docker network ls | grep ${HOST_NETWORK}
-						docker run -d --rm --network ${HOST_NETWORK} --name ${APP_NAME} ${APP_NAME}:${TAG_ID}
+						sleep 10
 						curl ${APP_NAME}:80 | grep 'active_count'
 					"""
 				}
@@ -56,7 +60,10 @@ pipeline{
 	}
 	post {
 		always {
-			sh "docker rmi -f ${APP_NAME}:${TAG_ID} | true"
+			sh """
+				docker stop ${APP_NAME} & docker rm ${APP_NAME} | true
+				docker rmi -f ${APP_NAME}:${TAG_ID} | true
+			"""
 		}
 	}
 }
