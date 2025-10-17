@@ -16,9 +16,7 @@ pipeline{
 				}
 			}
 			steps{
-				script{
-						sh "find . -name '*.php' -print0 | xargs -0 -n1 php -l"
-				}
+				sh "find . -name '*.php' -print0 | xargs -0 -n1 php -l"
 			}
 		}
 		stage ("unit test") {
@@ -28,18 +26,14 @@ pipeline{
 				}
 			}
 			steps {
-				script {
-					dir("app"){
-						sh "php index.php | grep 'active_count' "
-					}
+				dir("app"){
+					sh "php index.php | grep 'active_count' "
 				}
 			}
 		}
 		stage ("package") {
 			steps {
-				script{
-					sh "docker build -t ${APP_NAME}:${TAG_ID} ."
-				}
+				sh "docker build -t ${APP_NAME}:${TAG_ID} ."
 			}
 		}
 		stage ("e2e testing") {
