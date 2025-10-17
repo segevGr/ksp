@@ -55,8 +55,9 @@ pipeline{
 	post {
 		always {
 			sh """
-				docker stop ${APP_NAME} & docker rm ${APP_NAME} | true
-				docker rmi -f ${APP_NAME}:${TAG_ID} | true
+				docker stop ${APP_NAME} || true
+				docker rm ${APP_NAME} || true
+				docker rmi -f ${APP_NAME}:${TAG_ID} || true
 			"""
 		}
 	}
