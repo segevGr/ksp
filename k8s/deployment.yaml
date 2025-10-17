@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ksp-app
+  labels:
+    app: ksp-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ksp-app
+  template:
+    metadata:
+      labels:
+        app: ksp-app
+    spec:
+      containers:
+      - name: ksp-app
+        image: IMAGE_PROPS
+        ports:
+        - containerPort: 80
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 3
+        periodSeconds: 3
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 3
+        periodSeconds: 3
+

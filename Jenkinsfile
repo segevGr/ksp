@@ -62,6 +62,17 @@ pipeline{
 				"""
 			}
 		}
+		stage ("deploy"){
+			steps {
+				dir("k8s"){
+					sh """
+						sed -i "s,IMAGE_PROPS/${DOCKER_HUB_USER}/${APP_NAME}:${TAG_ID}/" deployment.yaml
+						kubectl apply -f deployment.yaml
+						kubectl rollout status deployment/ksp-app
+					"""
+				}
+			}
+		}
 	}
 	post {
 		always {
